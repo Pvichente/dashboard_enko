@@ -23,8 +23,8 @@ ENKO_WHITE = "#FFFFFF"
 ENKO_TEXT = "#2D1E3F"
 ENKO_MUTED = "#8B7FA3"
 
-DATA_PATH = os.getenv("ENKO_DATA_PATH", "dashboard_usuarios.xlsx")
-ACCESS_PATH = os.getenv("ENKO_ACCESS_PATH", "accesos_ejemplo.csv")
+DATA_PATH = os.getenv("ENKO_DATA_PATH", "data/dashboard_usuarios.xlsx")
+ACCESS_PATH = os.getenv("ENKO_ACCESS_PATH", "config/accesos_ejemplo.csv")
 SHEET_NAME = os.getenv("ENKO_SHEET_NAME", "Reporte Detallado de Usuarios")
 LOGO_PATH = os.getenv("ENKO_LOGO_PATH", "assets/logo_enko.png")
 
@@ -36,11 +36,35 @@ st.markdown(
     <style>
         .stApp {{
             background-color: {ENKO_BG};
+            color: {ENKO_TEXT};
         }}
         .main .block-container {{
             padding-top: 1.2rem;
             padding-bottom: 2rem;
             max-width: 1400px;
+        }}
+        /* Fuerza contraste adecuado en textos generales de Streamlit */
+        .stApp, .stApp p, .stApp span, .stApp label,
+        .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {{
+            color: {ENKO_TEXT} !important;
+        }}
+        .enko-header, .enko-header * {{
+            color: #FFFFFF !important;
+        }}
+        .small-note {{
+            color: {ENKO_MUTED} !important;
+        }}
+        /* Ajustes visuales para widgets */
+        div[data-baseweb="select"] > div,
+        div[data-baseweb="input"] > div {{
+            border-radius: 12px !important;
+        }}
+        div[data-testid="stSelectbox"] label,
+        div[data-testid="stTextInput"] label,
+        div[data-testid="stDateInput"] label,
+        div[data-testid="stMultiSelect"] label {{
+            color: {ENKO_TEXT} !important;
+            font-weight: 600 !important;
         }}
         .enko-header {{
             background: linear-gradient(135deg, {ENKO_PURPLE_LIGHT} 0%, {ENKO_PURPLE_DARK} 100%);
@@ -63,16 +87,16 @@ st.markdown(
             border-radius: 16px;
             padding: 18px 20px;
             box-shadow: 0 2px 10px rgba(76, 35, 115, 0.08);
-            border-left: 6px solid {ENKO_ORANGE};
+            border-left: 6px solid %s;
         }}
         .kpi-label {{
-            color: {ENKO_MUTED};
+            color: %s;
             font-size: 0.92rem;
             margin-bottom: 0.35rem;
             font-weight: 600;
         }}
         .kpi-value {{
-            color: {ENKO_TEXT};
+            color: %s;
             font-size: 2rem;
             font-weight: 700;
             line-height: 1.1;
@@ -98,7 +122,7 @@ st.markdown(
             border: 1px solid #ECE6F5;
         }}
         .small-note {{
-            color: {ENKO_MUTED};
+            color: %s;
             font-size: 0.88rem;
         }}
         .login-box {{
@@ -106,10 +130,10 @@ st.markdown(
             padding: 24px;
             border-radius: 18px;
             box-shadow: 0 2px 10px rgba(76, 35, 115, 0.10);
-            border-top: 6px solid {ENKO_ORANGE};
+            border-top: 6px solid %s;
         }}
     </style>
-    """,
+    """ % (ENKO_ORANGE, ENKO_MUTED, ENKO_TEXT, ENKO_MUTED, ENKO_ORANGE),
     unsafe_allow_html=True
 )
 
@@ -208,6 +232,7 @@ def build_line_chart(data, x_col, y_col, title, color):
     )
     fig.update_traces(line=dict(color=color, width=3), marker=dict(size=7))
     fig.update_layout(
+        template="plotly_white",
         title_font=dict(size=18, color=ENKO_TEXT),
         plot_bgcolor=ENKO_WHITE,
         paper_bgcolor=ENKO_WHITE,
@@ -218,8 +243,16 @@ def build_line_chart(data, x_col, y_col, title, color):
         hovermode="x unified",
         legend_title_text=""
     )
-    fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(gridcolor="#EEE7F6")
+    fig.update_xaxes(
+        showgrid=False,
+        tickfont=dict(color=ENKO_TEXT, size=13),
+        title_font=dict(color=ENKO_TEXT)
+    )
+    fig.update_yaxes(
+        gridcolor="#E6DDF2",
+        tickfont=dict(color=ENKO_TEXT, size=13),
+        title_font=dict(color=ENKO_TEXT)
+    )
     return fig
 
 def build_donut_chart(data, category_col, title):
@@ -242,14 +275,20 @@ def build_donut_chart(data, category_col, title):
         color_discrete_sequence=palette
     )
     fig.update_layout(
+        template="plotly_white",
         title_font=dict(size=18, color=ENKO_TEXT),
         paper_bgcolor=ENKO_WHITE,
         plot_bgcolor=ENKO_WHITE,
         margin=dict(l=10, r=10, t=50, b=10),
         font=dict(color=ENKO_TEXT),
-        legend_title_text=""
+        legend_title_text="",
+        legend=dict(font=dict(color=ENKO_TEXT))
     )
-    fig.update_traces(textposition="inside", textinfo="percent+label")
+    fig.update_traces(
+        textposition="inside",
+        textinfo="percent+label",
+        textfont=dict(color="#FFFFFF", size=12)
+    )
     return fig
 
 def logout():
@@ -431,13 +470,13 @@ def render_time_series(filtered):
     with c1:
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
         fig1 = build_line_chart(daily, "fecha_registro_dia", "registrados", "Registros por día", ENKO_PURPLE)
-        st.plotly_chart(fig1, use_container_width=True)
+        st.plotly_chart(fig1, use_container_width=True, theme=None)
         st.markdown("</div>", unsafe_allow_html=True)
 
     with c2:
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
         fig2 = build_line_chart(daily, "fecha_registro_dia", "activos", "Usuarios activos por día", ENKO_ORANGE)
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, use_container_width=True, theme=None)
         st.markdown("</div>", unsafe_allow_html=True)
 
 def render_demographics(filtered):
@@ -446,19 +485,19 @@ def render_demographics(filtered):
     with c1:
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
         fig = build_donut_chart(filtered, "Género", "Distribución por género")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, theme=None)
         st.markdown("</div>", unsafe_allow_html=True)
 
     with c2:
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
         fig = build_donut_chart(filtered, "Sector", "Distribución por sector")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, theme=None)
         st.markdown("</div>", unsafe_allow_html=True)
 
     with c3:
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
         fig = build_donut_chart(filtered, "Giro", "Distribución por giro")
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, theme=None)
         st.markdown("</div>", unsafe_allow_html=True)
 
 def render_table(filtered):
