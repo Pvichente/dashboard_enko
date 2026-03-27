@@ -23,7 +23,7 @@ ENKO_WHITE = "#FFFFFF"
 ENKO_TEXT = "#2D1E3F"
 ENKO_MUTED = "#8B7FA3"
 
-DATA_PATH = os.getenv("ENKO_DATA_PATH", "data/dashboard_usuarios.xlsx")
+DATA_PATH = os.getenv("ENKO_DATA_PATH", "dashboard_usuarios.xlsx")
 ACCESS_PATH = os.getenv("ENKO_ACCESS_PATH", "config/accesos_ejemplo.csv")
 SHEET_NAME = os.getenv("ENKO_SHEET_NAME", "Reporte Detallado de Usuarios")
 LOGO_PATH = os.getenv("ENKO_LOGO_PATH", "assets/logo_enko.png")
