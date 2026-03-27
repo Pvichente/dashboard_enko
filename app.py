@@ -63,16 +63,16 @@ st.markdown(
             border-radius: 16px;
             padding: 18px 20px;
             box-shadow: 0 2px 10px rgba(76, 35, 115, 0.08);
-            border-left: 6px solid %s;
+            border-left: 6px solid {ENKO_ORANGE};
         }}
         .kpi-label {{
-            color: %s;
+            color: {ENKO_MUTED};
             font-size: 0.92rem;
             margin-bottom: 0.35rem;
             font-weight: 600;
         }}
         .kpi-value {{
-            color: %s;
+            color: {ENKO_TEXT};
             font-size: 2rem;
             font-weight: 700;
             line-height: 1.1;
@@ -98,7 +98,7 @@ st.markdown(
             border: 1px solid #ECE6F5;
         }}
         .small-note {{
-            color: %s;
+            color: {ENKO_MUTED};
             font-size: 0.88rem;
         }}
         .login-box {{
@@ -106,10 +106,10 @@ st.markdown(
             padding: 24px;
             border-radius: 18px;
             box-shadow: 0 2px 10px rgba(76, 35, 115, 0.10);
-            border-top: 6px solid %s;
+            border-top: 6px solid {ENKO_ORANGE};
         }}
     </style>
-    """ % (ENKO_ORANGE, ENKO_MUTED, ENKO_TEXT, ENKO_MUTED, ENKO_ORANGE),
+    """,
     unsafe_allow_html=True
 )
 
