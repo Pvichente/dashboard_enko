@@ -13,7 +13,9 @@ st.set_page_config(
     layout="wide"
 )
 
-# Paleta inspirada en el logo compartido
+# =========================
+# Paleta ENKO
+# =========================
 ENKO_PURPLE = "#6F35A5"
 ENKO_PURPLE_DARK = "#4C2373"
 ENKO_PURPLE_LIGHT = "#8E52C4"
@@ -21,12 +23,18 @@ ENKO_ORANGE = "#F29A38"
 ENKO_BG = "#F7F4FB"
 ENKO_WHITE = "#FFFFFF"
 ENKO_TEXT = "#2D1E3F"
-ENKO_MUTED = "#8B7FA3"
+ENKO_MUTED = "#7A6C92"
 
-DATA_PATH = os.getenv("ENKO_DATA_PATH", "data/dashboard_usuarios.xlsx")
-ACCESS_PATH = os.getenv("ENKO_ACCESS_PATH", "config/accesos_ejemplo.csv")
+# =========================
+# Rutas
+# Ajustadas a tu estructura actual:
+# - app.py en raíz
+# - dashboard_usuarios.xlsx en raíz
+# - accesos_ejemplo.csv opcional en raíz
+# =========================
+DATA_PATH = os.getenv("ENKO_DATA_PATH", "dashboard_usuarios.xlsx")
+ACCESS_PATH = os.getenv("ENKO_ACCESS_PATH", "accesos_ejemplo.csv")
 SHEET_NAME = os.getenv("ENKO_SHEET_NAME", "Reporte Detallado de Usuarios")
-LOGO_PATH = os.getenv("ENKO_LOGO_PATH", "assets/logo_enko.png")
 
 # =========================
 # Estilos
@@ -38,27 +46,97 @@ st.markdown(
             background-color: {ENKO_BG};
             color: {ENKO_TEXT};
         }}
+
         .main .block-container {{
             padding-top: 1.2rem;
             padding-bottom: 2rem;
             max-width: 1400px;
         }}
-        /* Fuerza contraste adecuado en textos generales de Streamlit */
+
+        /* Texto general */
         .stApp, .stApp p, .stApp span, .stApp label,
         .stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {{
             color: {ENKO_TEXT} !important;
         }}
+
+        /* Header principal */
+        .enko-header {{
+            background: linear-gradient(135deg, {ENKO_PURPLE_LIGHT} 0%, {ENKO_PURPLE_DARK} 100%);
+            border-radius: 18px;
+            padding: 22px 28px;
+            margin-bottom: 1rem;
+        }}
+
         .enko-header, .enko-header * {{
             color: #FFFFFF !important;
         }}
+
+        .enko-title {{
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.1rem;
+        }}
+
+        .enko-subtitle {{
+            font-size: 1rem;
+            opacity: 0.95;
+        }}
+
+        /* Tarjetas KPI */
+        .kpi-card {{
+            background-color: {ENKO_WHITE};
+            border-radius: 16px;
+            padding: 18px 20px;
+            box-shadow: 0 2px 10px rgba(76, 35, 115, 0.08);
+            border-left: 6px solid {ENKO_ORANGE};
+            margin-bottom: 0.5rem;
+        }}
+
+        .kpi-label {{
+            color: {ENKO_MUTED} !important;
+            font-size: 0.92rem;
+            margin-bottom: 0.35rem;
+            font-weight: 600;
+        }}
+
+        .kpi-value {{
+            color: {ENKO_TEXT} !important;
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.1;
+        }}
+
+        /* Secciones */
+        .section-card {{
+            background-color: {ENKO_WHITE};
+            border-radius: 18px;
+            padding: 18px 18px 8px 18px;
+            box-shadow: 0 2px 10px rgba(76, 35, 115, 0.08);
+            margin-bottom: 1rem;
+        }}
+
+        .filter-card {{
+            background-color: {ENKO_WHITE};
+            border-radius: 16px;
+            padding: 18px 18px 6px 18px;
+            box-shadow: 0 2px 10px rgba(76, 35, 115, 0.08);
+            margin-bottom: 1rem;
+        }}
+
         .small-note {{
             color: {ENKO_MUTED} !important;
+            font-size: 0.90rem;
         }}
-        /* Ajustes visuales para widgets */
-        div[data-baseweb="select"] > div,
-        div[data-baseweb="input"] > div {{
-            border-radius: 12px !important;
+
+        .login-box {{
+            background-color: {ENKO_WHITE};
+            padding: 24px;
+            border-radius: 18px;
+            box-shadow: 0 2px 10px rgba(76, 35, 115, 0.10);
+            border-top: 6px solid {ENKO_ORANGE};
         }}
+
+        /* Labels visibles */
         div[data-testid="stSelectbox"] label,
         div[data-testid="stTextInput"] label,
         div[data-testid="stDateInput"] label,
@@ -66,74 +144,19 @@ st.markdown(
             color: {ENKO_TEXT} !important;
             font-weight: 600 !important;
         }}
-        .enko-header {{
-            background: linear-gradient(135deg, {ENKO_PURPLE_LIGHT} 0%, {ENKO_PURPLE_DARK} 100%);
-            border-radius: 18px;
-            padding: 22px 28px;
-            margin-bottom: 1rem;
-            color: white;
+
+        /* Inputs con mejor look */
+        div[data-baseweb="select"] > div,
+        div[data-baseweb="input"] > div {{
+            border-radius: 12px !important;
         }}
-        .enko-title {{
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.1rem;
-        }}
-        .enko-subtitle {{
-            font-size: 1rem;
-            opacity: 0.95;
-        }}
-        .kpi-card {{
-            background-color: white;
-            border-radius: 16px;
-            padding: 18px 20px;
-            box-shadow: 0 2px 10px rgba(76, 35, 115, 0.08);
-            border-left: 6px solid %s;
-        }}
-        .kpi-label {{
-            color: %s;
-            font-size: 0.92rem;
-            margin-bottom: 0.35rem;
-            font-weight: 600;
-        }}
-        .kpi-value {{
-            color: %s;
-            font-size: 2rem;
-            font-weight: 700;
-            line-height: 1.1;
-        }}
-        .section-card {{
-            background-color: white;
-            border-radius: 18px;
-            padding: 18px 18px 8px 18px;
-            box-shadow: 0 2px 10px rgba(76, 35, 115, 0.08);
-            margin-bottom: 1rem;
-        }}
-        .filter-card {{
-            background-color: white;
-            border-radius: 16px;
-            padding: 18px 18px 6px 18px;
-            box-shadow: 0 2px 10px rgba(76, 35, 115, 0.08);
-            margin-bottom: 1rem;
-        }}
-        div[data-testid="stMetric"] {{
-            background-color: white;
-            border-radius: 16px;
-            padding: 14px;
-            border: 1px solid #ECE6F5;
-        }}
-        .small-note {{
-            color: %s;
-            font-size: 0.88rem;
-        }}
-        .login-box {{
-            background-color: white;
-            padding: 24px;
-            border-radius: 18px;
-            box-shadow: 0 2px 10px rgba(76, 35, 115, 0.10);
-            border-top: 6px solid %s;
+
+        /* Dataframe */
+        div[data-testid="stDataFrame"] {{
+            background-color: {ENKO_WHITE};
         }}
     </style>
-    """ % (ENKO_ORANGE, ENKO_MUTED, ENKO_TEXT, ENKO_MUTED, ENKO_ORANGE),
+    """,
     unsafe_allow_html=True
 )
 
@@ -147,7 +170,7 @@ def normalize_text(value):
 
 def format_int(value):
     try:
-        return f"{int(round(float(value))):,}".replace(",", ",")
+        return f"{int(round(float(value))):,}"
     except Exception:
         return "0"
 
@@ -163,18 +186,17 @@ def safe_parse_datetime(series):
         parsed = pd.to_datetime(series, errors="coerce")
     return parsed
 
-@st.cache_data(show_spinner=False)
-def load_access_table(path):
-    access = pd.read_csv(path)
-    required = {"aliado", "clave"}
-    missing = required - set(access.columns)
-    if missing:
-        raise ValueError(f"Faltan columnas en accesos: {', '.join(sorted(missing))}")
-    access["aliado_norm"] = access["aliado"].map(normalize_text)
-    if "activo" not in access.columns:
-        access["activo"] = 1
-    access = access[access["activo"].fillna(1).astype(int) == 1].copy()
-    return access
+# =========================
+# Carga de accesos
+# Si no existe archivo de accesos, genera uno demo automáticamente
+# =========================
+def build_demo_access(df):
+    aliados = sorted(df["Aliado"].dropna().astype(str).str.strip().unique().tolist())
+    return pd.DataFrame({
+        "aliado": aliados,
+        "clave": ["demo123"] * len(aliados),
+        "activo": [1] * len(aliados)
+    })
 
 @st.cache_data(show_spinner=False)
 def load_data(path, sheet_name):
@@ -182,32 +204,40 @@ def load_data(path, sheet_name):
     target_sheet = sheet_name if sheet_name in xls.sheet_names else xls.sheet_names[0]
     df = pd.read_excel(path, sheet_name=target_sheet)
 
-    # Limpieza base
     df.columns = [str(c).strip() for c in df.columns]
     df = df.dropna(how="all").copy()
 
     required_cols = [
-        "Aliado", "Nombre completo", "Lada", "Teléfono", "Correo usuario", "Género",
-        "Sector", "Giro", "Lecciones completadas", "Fecha de registro", "Último acceso"
+        "Aliado",
+        "Nombre completo",
+        "Lada",
+        "Teléfono",
+        "Correo usuario",
+        "Género",
+        "Sector",
+        "Giro",
+        "Lecciones completadas",
+        "Fecha de registro",
+        "Último acceso"
     ]
     for col in required_cols:
         if col not in df.columns:
             df[col] = pd.NA
 
-    # Tipos y transformaciones
     df["Aliado"] = df["Aliado"].astype(str).str.strip()
-    df = df[df["Aliado"].notna() & (df["Aliado"] != "nan") & (df["Aliado"] != "")].copy()
+    df = df[df["Aliado"].notna() & (df["Aliado"] != "") & (df["Aliado"] != "nan")].copy()
     df["aliado_norm"] = df["Aliado"].map(normalize_text)
 
     df["Nombre completo"] = df["Nombre completo"].fillna("Sin nombre").astype(str).str.strip()
     df["Lada"] = df["Lada"].fillna("").astype(str).str.replace(".0", "", regex=False).str.strip()
     df["Teléfono"] = df["Teléfono"].fillna("").astype(str).str.replace(".0", "", regex=False).str.strip()
-    df["Correo usuario"] = df["Correo usuario"].fillna("Sin dato").astype(str).str.strip()
-    df["Género"] = df["Género"].fillna("Sin dato").replace("", "Sin dato")
-    df["Sector"] = df["Sector"].fillna("Sin dato").replace("", "Sin dato")
-    df["Giro"] = df["Giro"].fillna("Sin dato").replace("", "Sin dato")
+    df["Correo usuario"] = df["Correo usuario"].fillna("Sin dato").astype(str).replace("nan", "Sin dato")
+    df["Género"] = df["Género"].fillna("Sin dato").replace("", "Sin dato").replace("nan", "Sin dato")
+    df["Sector"] = df["Sector"].fillna("Sin dato").replace("", "Sin dato").replace("nan", "Sin dato")
+    df["Giro"] = df["Giro"].fillna("Sin dato").replace("", "Sin dato").replace("nan", "Sin dato")
 
     df["Lecciones completadas"] = pd.to_numeric(df["Lecciones completadas"], errors="coerce").fillna(0)
+
     df["Fecha de registro_dt"] = safe_parse_datetime(df["Fecha de registro"])
     df["Último acceso_dt"] = safe_parse_datetime(df["Último acceso"])
     df["fecha_registro_dia"] = df["Fecha de registro_dt"].dt.date
@@ -216,12 +246,33 @@ def load_data(path, sheet_name):
         lambda x: "Activo" if pd.notna(x) and x >= 1 else "Registrado"
     )
 
-    # Columnas de salida legibles
     df["Fecha de registro_fmt"] = df["Fecha de registro_dt"].dt.strftime("%Y-%m-%d %H:%M").fillna("Sin dato")
     df["Último acceso_fmt"] = df["Último acceso_dt"].dt.strftime("%Y-%m-%d %H:%M").fillna("Sin dato")
 
     return df
 
+@st.cache_data(show_spinner=False)
+def load_access_table(path, df):
+    if Path(path).exists():
+        access = pd.read_csv(path)
+        required = {"aliado", "clave"}
+        missing = required - set(access.columns)
+        if missing:
+            raise ValueError(f"Faltan columnas en accesos: {', '.join(sorted(missing))}")
+        if "activo" not in access.columns:
+            access["activo"] = 1
+    else:
+        access = build_demo_access(df)
+
+    access["aliado"] = access["aliado"].astype(str).str.strip()
+    access["clave"] = access["clave"].astype(str).str.strip()
+    access["aliado_norm"] = access["aliado"].map(normalize_text)
+    access = access[access["activo"].fillna(1).astype(int) == 1].copy()
+    return access
+
+# =========================
+# Charts
+# =========================
 def build_line_chart(data, x_col, y_col, title, color):
     fig = px.line(
         data,
@@ -265,7 +316,16 @@ def build_donut_chart(data, category_col, title):
     )
     counts.columns = [category_col, "Usuarios"]
 
-    palette = [ENKO_PURPLE, ENKO_ORANGE, ENKO_PURPLE_LIGHT, "#B08AD4", "#D4B7F0", "#FFD5A3", "#CFC6DA"]
+    palette = [
+        ENKO_PURPLE,
+        ENKO_ORANGE,
+        ENKO_PURPLE_LIGHT,
+        "#B08AD4",
+        "#D4B7F0",
+        "#FFD5A3",
+        "#CFC6DA"
+    ]
+
     fig = px.pie(
         counts,
         names=category_col,
@@ -291,6 +351,9 @@ def build_donut_chart(data, category_col, title):
     )
     return fig
 
+# =========================
+# Componentes UI
+# =========================
 def logout():
     st.session_state["authenticated"] = False
     st.session_state["current_ally"] = None
@@ -313,7 +376,7 @@ def render_header(current_ally):
             logout()
             st.rerun()
 
-def render_login(access_df):
+def render_login(access_df, using_demo_access):
     st.markdown(
         """
         <div class="enko-header">
@@ -324,61 +387,78 @@ def render_login(access_df):
         unsafe_allow_html=True
     )
 
-    with st.container():
-        left, center, right = st.columns([1, 1.4, 1])
-        with center:
-            st.markdown('<div class="login-box">', unsafe_allow_html=True)
-            st.subheader("Ingresa con tu aliado y clave")
-            ally = st.selectbox(
-                "Aliado",
-                options=access_df["aliado"].tolist(),
-                index=None,
-                placeholder="Selecciona tu aliado"
-            )
-            password = st.text_input("Clave", type="password", placeholder="Escribe tu clave")
-            login_btn = st.button("Ingresar", use_container_width=True)
+    left, center, right = st.columns([1, 1.45, 1])
 
+    with center:
+        st.markdown('<div class="login-box">', unsafe_allow_html=True)
+        st.subheader("Ingresa con tu aliado y clave")
+
+        ally = st.selectbox(
+            "Aliado",
+            options=access_df["aliado"].tolist(),
+            index=None,
+            placeholder="Selecciona tu aliado"
+        )
+
+        password = st.text_input(
+            "Clave",
+            type="password",
+            placeholder="Escribe tu clave"
+        )
+
+        login_btn = st.button("Ingresar", use_container_width=True)
+
+        if using_demo_access:
             st.markdown(
-                '<div class="small-note">Para el MVP se incluyen credenciales de ejemplo. '
-                'Después puedes sustituirlas por claves reales en el archivo de accesos.</div>',
+                '<div class="small-note">No se detectó archivo de accesos. '
+                'Se activó el modo demo: todos los aliados usan la clave <b>demo123</b>.</div>',
                 unsafe_allow_html=True
             )
-            st.markdown("</div>", unsafe_allow_html=True)
+        else:
+            st.markdown(
+                '<div class="small-note">Acceso habilitado con archivo de claves.</div>',
+                unsafe_allow_html=True
+            )
 
-            if login_btn:
-                if not ally or not password:
-                    st.warning("Selecciona un aliado y captura una clave.")
-                    return
+        st.markdown("</div>", unsafe_allow_html=True)
 
-                match = access_df[
-                    (access_df["aliado_norm"] == normalize_text(ally)) &
-                    (access_df["clave"].astype(str) == str(password))
-                ]
+        if login_btn:
+            if not ally or not password:
+                st.warning("Selecciona un aliado y captura una clave.")
+                return
 
-                if match.empty:
-                    st.error("La combinación de aliado y clave no es válida.")
-                else:
-                    st.session_state["authenticated"] = True
-                    st.session_state["current_ally"] = ally
-                    st.rerun()
+            match = access_df[
+                (access_df["aliado_norm"] == normalize_text(ally)) &
+                (access_df["clave"].astype(str) == str(password).strip())
+            ]
+
+            if match.empty:
+                st.error("La combinación de aliado y clave no es válida.")
+            else:
+                st.session_state["authenticated"] = True
+                st.session_state["current_ally"] = ally
+                st.rerun()
 
 def render_filters(df_ally):
     st.markdown('<div class="filter-card">', unsafe_allow_html=True)
     st.subheader("Filtros")
 
-    min_date = df_ally["fecha_registro_dia"].dropna().min()
-    max_date = df_ally["fecha_registro_dia"].dropna().max()
+    valid_dates = df_ally["fecha_registro_dia"].dropna()
+    min_date = valid_dates.min() if not valid_dates.empty else None
+    max_date = valid_dates.max() if not valid_dates.empty else None
 
     col1, col2, col3, col4, col5 = st.columns(5)
 
     with col1:
-        default_dates = (min_date, max_date) if pd.notna(min_date) and pd.notna(max_date) else ()
-        date_range = st.date_input(
-            "Rango de fechas",
-            value=default_dates,
-            min_value=min_date,
-            max_value=max_date
-        )
+        if min_date and max_date:
+            date_range = st.date_input(
+                "Rango de fechas",
+                value=(min_date, max_date),
+                min_value=min_date,
+                max_value=max_date
+            )
+        else:
+            date_range = ()
 
     with col2:
         status = st.selectbox("Estatus", ["Todos", "Registrado", "Activo"])
@@ -408,7 +488,7 @@ def render_filters(df_ally):
 
     filtered = df_ally.copy()
 
-    if len(date_range) == 2:
+    if isinstance(date_range, tuple) and len(date_range) == 2:
         start_date, end_date = date_range
         filtered = filtered[
             (filtered["fecha_registro_dia"] >= start_date) &
@@ -467,6 +547,7 @@ def render_time_series(filtered):
     )
 
     c1, c2 = st.columns(2)
+
     with c1:
         st.markdown('<div class="section-card">', unsafe_allow_html=True)
         fig1 = build_line_chart(daily, "fecha_registro_dia", "registrados", "Registros por día", ENKO_PURPLE)
@@ -505,9 +586,18 @@ def render_table(filtered):
     st.subheader("Detalle de usuarios")
 
     table_cols = [
-        "Nombre completo", "Lada", "Teléfono", "Correo usuario", "Género",
-        "Sector", "Giro", "Lecciones completadas", "Fecha de registro_fmt", "Último acceso_fmt"
+        "Nombre completo",
+        "Lada",
+        "Teléfono",
+        "Correo usuario",
+        "Género",
+        "Sector",
+        "Giro",
+        "Lecciones completadas",
+        "Fecha de registro_fmt",
+        "Último acceso_fmt"
     ]
+
     table = filtered[table_cols].rename(
         columns={
             "Fecha de registro_fmt": "Fecha de registro",
@@ -520,6 +610,7 @@ def render_table(filtered):
         use_container_width=True,
         hide_index=True
     )
+
     st.markdown("</div>", unsafe_allow_html=True)
 
 # =========================
@@ -533,23 +624,24 @@ def main():
 
     if not Path(DATA_PATH).exists():
         st.error(f"No se encontró el archivo de datos en: {DATA_PATH}")
-        st.info("Sube tu archivo a la ruta esperada o define la variable ENKO_DATA_PATH.")
-        return
-
-    if not Path(ACCESS_PATH).exists():
-        st.error(f"No se encontró el archivo de accesos en: {ACCESS_PATH}")
-        st.info("Crea el CSV de accesos o define la variable ENKO_ACCESS_PATH.")
+        st.info("Asegúrate de que el Excel esté en la raíz del repositorio con ese nombre, o cambia DATA_PATH.")
         return
 
     try:
-        access_df = load_access_table(ACCESS_PATH)
         df = load_data(DATA_PATH, SHEET_NAME)
     except Exception as e:
-        st.error(f"Error al cargar la información: {e}")
+        st.error(f"Error al cargar la base de datos: {e}")
+        return
+
+    try:
+        using_demo_access = not Path(ACCESS_PATH).exists()
+        access_df = load_access_table(ACCESS_PATH, df)
+    except Exception as e:
+        st.error(f"Error al cargar accesos: {e}")
         return
 
     if not st.session_state["authenticated"]:
-        render_login(access_df)
+        render_login(access_df, using_demo_access)
         return
 
     current_ally = st.session_state["current_ally"]
